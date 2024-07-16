@@ -1,0 +1,23 @@
+services:
+  app:
+    image: node:20-alpine
+    volumes:
+      - ./app:/app
+    ports:
+      - 3000:3000
+    working_dir: /app
+    command: npm run setup
+
+  demodb:
+    image: postgres:16-alpine
+    volumes:
+      - ./demodb:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_USER=demodb
+      - POSTGRES_PASSWORD=passw0rd
+      - POSTGRES_DB=demodb
+  
+  adminer:
+    image: adminer
+    ports:
+      - 8080:8080
