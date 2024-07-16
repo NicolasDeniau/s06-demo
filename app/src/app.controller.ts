@@ -1,9 +1,11 @@
-import { Controller, Get, Post, Delete, Patch, Put, All } from '@nestjs/common';
+import { All, Body, Controller, Delete, Get, Param, Patch, Post, Put } from '@nestjs/common';
 import { AppService } from './app.service';
+import { UserCreateDto } from './dto/UserCreateDto';
+import { UserUpdateDto } from './dto/UserUpdateDto';
 
 
-// :3000/foo = route
-@Controller('foo')
+// :3000/api = route
+@Controller('api')
 export class AppController {
   constructor(private readonly appService: AppService) {}
 
@@ -13,25 +15,31 @@ export class AppController {
   }
 
   // route = :3000/api/create
-  @Post('/create')
-  post() {
-    return 'Route POST';
+  @Post('create')
+  post(@Body() body: UserCreateDto) {
+    return {
+      route: 'Route POST',
+      user: body
+    };
   }
 
   // même route pour les 3 = :3000/api, seul la méthode HTTP change 
-  @Put()
-  put() {
-    return 'Route PUT';
+  @Put(':id')
+  put(@Param('id') id: string) {
+    return 'Route PUT ' + id;
   }
 
-  @Patch()
-  patch() {
-    return 'Route PATCH';
+  @Patch(':id')
+  patch(@Param('id') id: string, @Body() body: UserUpdateDto) {
+    return {
+      route: 'Route PATCH ' + id,
+      user: body
+    };
   }
 
-  @Delete()
-  delete() {
-    return 'Route DELETE';
+  @Delete(':id')
+  delete(@Param('id') id: string) {
+    return 'Route DELETE ' + id;
   }
 
   // acepte toutes les méthodes
